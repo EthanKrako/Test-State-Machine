@@ -6,12 +6,12 @@ public class PlayerGroundedState : PlayerBaseState
 {
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory){
         IsRootState = true;
-        InitializeSubState();
     }
 
     public override void EnterState() {
         Ctx.CurrentMovementY = Ctx.Gravity;
         Ctx.AppliedMovementY = Ctx.Gravity;
+        InitializeSubState();
     }
 
     public override void UpdateState() {
