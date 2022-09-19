@@ -31,7 +31,6 @@ public class PlayerStateMachine : MonoBehaviour
     float _runMultiplier = 3.0f;
 
     // gravity variables
-    float _groundedGravity = -.05f;
     float _gravity = -9.8f;
     float _maxFallingSpeed = -20.0f;
 
@@ -68,7 +67,7 @@ public class PlayerStateMachine : MonoBehaviour
     public bool RequireNewJumpPress { get { return _requireNewJumpPress; } set { _requireNewJumpPress = value; }}
     public bool IsJumping { set { _isJumping = value; }}
     public bool IsJumpPressed { get { return _isJumpPressed; }}
-    public float GroundedGravity { get { return _groundedGravity; }}
+    public float Gravity { get { return _gravity; }}
     public float CurrentMovementY { get { return _currentMovement.y; } set { _currentMovement.y = value; }}
     public float AppliedMovementY { get { return _appliedMovement.y; } set { _appliedMovement.y = value; }}
     public float AppliedMovementX { get { return _appliedMovement.x; } set { _appliedMovement.x = value; }}

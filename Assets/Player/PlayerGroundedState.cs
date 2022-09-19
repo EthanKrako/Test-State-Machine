@@ -10,8 +10,8 @@ public class PlayerGroundedState : PlayerBaseState
     }
 
     public override void EnterState() {
-        Ctx.CurrentMovementY = Ctx.GroundedGravity;
-        Ctx.AppliedMovementY = Ctx.GroundedGravity;
+        Ctx.CurrentMovementY = Ctx.Gravity;
+        Ctx.AppliedMovementY = Ctx.Gravity;
     }
 
     public override void UpdateState() {
