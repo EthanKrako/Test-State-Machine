@@ -9,6 +9,8 @@ public class PlayerStateMachine : MonoBehaviour
     PlayerInput _playerInput;
     CharacterController _characterController;
     Animator _animator;
+    Camera _camera;
+    Transform _rotationPoint;
 
     //variables to store optimized setter/getter parameters IDs (Performance optimization)
     int _isWalkingHash;
@@ -79,6 +81,7 @@ public class PlayerStateMachine : MonoBehaviour
         _playerInput = new PlayerInput();
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
+        _camera = Camera.main;
 
         // setup states
         _states = new PlayerStateFactory(this);
@@ -131,11 +134,14 @@ public class PlayerStateMachine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        handleRotation();
-        _characterController.Move(_appliedMovement * Time.deltaTime);
+        _rotationPoint = _camera.transform;
+        _rotationPoint.rotation = new Quaternion(0, _rotationPoint.rotation.y, 0, _rotationPoint.rotation.w);
+        handleRotation(_rotationPoint);
+        _characterController.Move(_rotationPoint.TransformDirection(_appliedMovement * Time.deltaTime));
         _currentState.UpdateStates();
     }
 
+    // Handle Rotation with fix camera
     void handleRotation() {
         Vector3 positionToLookAt;
         positionToLookAt.x = _currentMovementInput.x;
@@ -146,6 +152,21 @@ public class PlayerStateMachine : MonoBehaviour
 
         if (_isMovementPressed) {
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
+            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, _rotationFactorPerFrame * Time.deltaTime);
+        }
+    }
+
+    // Handle rotation base on the camera rotation
+    void handleRotation(Transform rotationPoint) {
+        Vector3 positionToLookAt;
+        positionToLookAt.x = _currentMovementInput.x;
+        positionToLookAt.y = 0.0f;
+        positionToLookAt.z = _currentMovementInput.y;
+
+        Quaternion currentRotation = transform.rotation;
+
+        if (_isMovementPressed) {
+            Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt) * rotationPoint.rotation;
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, _rotationFactorPerFrame * Time.deltaTime);
         }
     }
